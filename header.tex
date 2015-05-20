@@ -1,0 +1,15 @@
+% load format
+\input musixtex
+\input musixlyr % or \let\nolyr=\relax
+\input musixadd
+
+% compability stuff
+\let\setvoices=\instrumentnumber
+\let\Startpiece=\startpiece
+
+% auxiliary staff
+\def\cap#1{\pt{#1}\ca{#1}}
+\def\qap#1{\pt{#1}\qa{#1}}
+\def\hap#1{\pt{#1}\ha{#1}}
+\def\qpp{\pt 4\qp} % don't move with \transpose
+
