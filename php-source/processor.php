@@ -20,10 +20,12 @@
 
 	class BeamState {
 		public $start;
+		public $middle = array();
 		public $heights = 0;
 		public $count = 0;
 		public $min;
 		public $max;
+		public $multiplicity;
 	}
 
 	class Processor {
@@ -91,6 +93,7 @@
 							$state->start = $duration;
 							$state->min = $duration->height;
 							$state->max = $duration->height;
+							$state->multiplicity = $duration->multiplicity;
 							$maxBeam += 1;
 						}
 						$duration->number = $maxBeam;
@@ -98,6 +101,11 @@
 						$state->min = min($state->min, $duration->height);
 						$state->max = min($state->max, $duration->height);
 						$state->count++;
+						if ($duration instanceof BeamContinue) {
+							$state->middle[] = $duration;
+							$duration->change = $state->multiplicity - $duration->multiplicity;
+							$state->multiplicity = $duration->multiplicity;
+						}
 						if ($duration instanceof BeamEnd) {
 							$slant = $duration->height - $state->start->height;
 							$sign = ($slant < 0) ? -1 : 1;
@@ -115,6 +123,9 @@
 
 							$average = $state->heights / $state->count;
 							$state->start->up = ($average < self::UP_LIMIT);
+							foreach ($state->middle as $middle) {
+								$middle->up = $state->start->up;
+							}
 							$duration->up = $state->start->up;
 						}
 					}

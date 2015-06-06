@@ -142,6 +142,7 @@
 		protected function getDuration($x_note) {
 			$rest = FALSE;
 			$pointed = 0;
+			$beams = array();
 			foreach ($x_note as $info) {
 				$name = $info->getName();
 				switch ($name) {
@@ -162,7 +163,7 @@
 						$long = $this->types[$type];
 						break;
 					case 'beam':
-						$beam = (string) $info;
+						$beams[] = (string) $info;
 						break;
 					case 'rest':
 						$rest = TRUE;
@@ -184,19 +185,8 @@
 			}
 			
 			if (isset($height)) {
-				if (isset($beam)) {
-					// TODO: double beams
-					// TODO: partial beams
-					// TODO: beams changes
-					if ($beam=='begin') {
-						$duration = new BeamStart();
-					} elseif ($beam=='end') {
-						$duration = new BeamEnd();
-					} elseif ($beam=='continue') {
-						$duration = new BeamContinue();
-					} else {
-						return $this->getUnsupported('BEAM TYPE', 'type: '.$beam);
-					}
+				if (!empty($beams)) {
+					$duration = $this->getBeam($beams);
 				} else {
 					$duration = new Note();
 				}
@@ -207,6 +197,60 @@
 				return $this->getUnsupported('NOTE', 'unknown type');
 			}
 			$duration->long = $long;
+			return $duration;
+		}
+
+		protected function getBeam(array $beams) {
+			$begin = array();
+			$continue = array();
+			$end = array();
+			$partial = 0;
+			foreach ($beams as $beam) {
+				switch ($beam) {
+					case 'begin':
+						$begin[] = $beam;
+						break;
+					case 'continue':
+						$continue[] = $beam;
+						break;
+					case 'end':
+						$end[] = $beam;
+						break;
+					case 'forward hook':
+						assert('$partial == 0');
+						$partial = 1;
+						break;
+					case 'backward hook':
+						assert('$partial == 0');
+						$partial = -1;
+						break;
+					default:
+						return $this->getUnsupported('BEAM TYPE', 'type: '.$beam);
+				}
+			}
+			$duration = NULL;
+			if (!empty($continue)) {
+				$duration = new BeamContinue();
+				$duration->multiplicity = count($continue);
+				$duration->multiplicity += count($begin);
+			} elseif (!empty($begin)) {
+				$duration = new BeamStart();
+				$duration->multiplicity = count($begin);
+				assert('count($end)==0');
+			} elseif (!empty($end)) {
+				$duration = new BeamEnd();
+				$duration->multiplicity = count($end);
+			}
+			assert('!is_null($duration)');
+			if ($duration->multiplicity > 2) {
+				return $this->getUnsupported('BEAM MULTIPLICITY', 'count: '.$duration->multiplicity);
+			}
+			if ($partial == 1) {
+				assert('$duration instanceof BeamStart || $duration instanceof BeamContinue');
+			} elseif ($partial == -1) {
+				assert('$duration instanceof BeamEnd || $duration instanceof BeamContinue');
+			}
+			$duration->partial = $partial;
 			return $duration;
 		}
 

@@ -288,28 +288,38 @@
 		protected function getBeamStart(BeamStart $beam) {
 			$nl = $this->nl($beam->nolyr);
 			$conn = $this->getConnections($beam);
+			$bb = $this->bb($beam->multiplicity);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
 			$sl = $this->nr($beam->slant);
 			$ht = $this->ht($beam);
-			return $nl.$conn.'\ib'.$bu.$nr.$ht.$sl.'\qb'.$nr.$ht;
+			$pt = $this->pt($beam->long);
+			$partial = $this->partial($beam->partial, $nr, $bu);
+			return $nl.$conn.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.'\qb'.$pt.$nr.$ht;
 		}
 
 		protected function getBeamContinue(BeamContinue $beam) {
 			$nl = $this->nl($beam->nolyr);
 			$conn = $this->getConnections($beam);
+			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
+			$change = $this->change($beam->change, $nr, $bu);
 			$ht = $this->ht($beam);
-			return $nl.$conn.'\qb'.$nr.$ht;
+			$pt = $this->pt($beam->long);
+			$partial = $this->partial($beam->partial, $nr, $bu);
+			return $nl.$conn.$change.$partial.'\qb'.$pt.$nr.$ht;
 		}
 
 		protected function getBeamEnd(BeamEnd $beam) {
 			$nl = $this->nl($beam->nolyr);
 			$conn = $this->getConnections($beam);
+			$bb = $this->bb($beam->multiplicity);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
 			$ht = $this->ht($beam);
-			return $nl.$conn.'\tb'.$bu.$nr.'\qb'.$nr.$ht;
+			$pt = $this->pt($beam->long);
+			$partial = $this->partial($beam->partial, $nr, $bu);
+			return $nl.$conn.$partial.'\tb'.$bu.$nr.'\qb'.$pt.$nr.$ht;
 		}
 
 		protected function getConnections(Duration $note) {
@@ -339,6 +349,26 @@
 		}
 
 
+		protected function change($change, $nr, $bu) {
+			if ($change > 0) {
+				return '\tbb'.$bu.$nr;
+			}
+			if ($change < 0) {
+				return '\nbb'.$bu.$nr;
+			}
+			return '';
+		}
+
+		protected function partial($partial, $nr, $bu) {
+			if ($partial > 0) {
+				return '\roff{\tbb'.$bu.$nr.'}';
+			}
+			if ($partial < 0) {
+				return '\tbb'.$bu.$nr;
+			}
+			return '';
+		}
+
 		protected function ht(Note $note) {
 			return $this->pitches[$note->height];
 		}
@@ -351,12 +381,20 @@
 			return ($number>=0 && $number<=9) ? $number : '{'.$number.'}' ;
 		}
 
+		protected function bb($count) {
+			return str_repeat('b', $count);
+		}
+
 		protected function bu($up) {
 			return $up ? 'u' : 'l';
 		}
 
 		protected function cu($up) {
 			return $up ? 'u' : 'd';
+		}
+
+		protected function pt($long) {
+			return (($long != 1) && ($long % 2 == 1)) ? 'p' : '';
 		}
 
 		protected function add($line) {

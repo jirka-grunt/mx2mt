@@ -17,7 +17,7 @@ Supported features:
 - lengths: from 1/16 to whole note
 - heights: from C2 to H6 (5 octaves)
 - single dots from 1/8 notes and rests
-- single beams
+- beams: single, duble, partial, dotted
 - slurs and ties
 - repeats: left, right, both
 - endings: begin and end volta

@@ -108,18 +108,20 @@
 
 	abstract class Beam extends Note {
 		public $number;
+		public $up;
+		public $multiplicity;
+		public $partial;
 	}
 
 	class BeamStart extends Beam {
 		public $slant;
-		public $up;
 	}
 
 	class BeamContinue extends Beam {
+		public $change;
 	}
 
 	class BeamEnd extends Beam {
-		public $up;
 	}
 
 	// ----- connections -----
