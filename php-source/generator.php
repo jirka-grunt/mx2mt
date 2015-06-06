@@ -31,7 +31,7 @@
 			);
 
 		protected $pause = array(
-				1  => '\dss',
+				1  => '\qs',
 				2  => '\ds',
 				3  => '\dsp',
 				4  => '\qp',
