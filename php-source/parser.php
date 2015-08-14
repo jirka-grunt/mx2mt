@@ -91,44 +91,43 @@
 
 					$x_barlines = $x_part->xpath('barline');
 					if (!empty($x_barlines)) {
-						assert('count($x_barlines)===1');
-						$x_barlines = $x_barlines[0];
-
-						$x_ending = $x_barlines->xpath('ending');
-						if (!empty($x_ending)) {
-							assert('count($x_ending)===1');
-							$x_ending = $x_ending[0];
-							$type = (string) $x_ending['type'];
-							$volta = new Volta;
-							$volta->number = (string) $x_ending['number'];
-							if ($type == 'start') {
-								$volta->start = TRUE;
-							} elseif ($type == 'stop') {
-								$volta->start = FALSE;
-							} else {
-								$volta = $this->getUnsupported('VOLTA TYPE', 'number: '.$volta->number.', type: '.$type);
+						foreach ($x_barlines as $x_barline) {
+							$x_ending = $x_barline->xpath('ending');
+							if (!empty($x_ending)) {
+								assert('count($x_ending)===1');
+								$x_ending = $x_ending[0];
+								$type = (string) $x_ending['type'];
+								$volta = new Volta;
+								$volta->number = (string) $x_ending['number'];
+								if ($type == 'start') {
+									$volta->start = TRUE;
+								} elseif ($type == 'stop') {
+									$volta->start = FALSE;
+								} else {
+									$volta = $this->getUnsupported('VOLTA TYPE', 'number: '.$volta->number.', type: '.$type);
+								}
+								$part->endings[] = $volta;
 							}
-							$part->endings[] = $volta;
-						}
 
-						$x_repeat = $x_barlines->xpath('repeat');
-						if (!empty($x_repeat)) {
-							assert('count($x_repeat)===1');
-							$x_repeat = $x_repeat[0];
-							$direction = (string) $x_repeat['direction'];
-							$repeat = new Repeat;
-							$repeat->left = ($direction == 'forward');
-							$repeat->right = ($direction == 'backward');
-							$part->endings[] = $repeat;
-						}
+							$x_repeat = $x_barline->xpath('repeat');
+							if (!empty($x_repeat)) {
+								assert('count($x_repeat)===1');
+								$x_repeat = $x_repeat[0];
+								$direction = (string) $x_repeat['direction'];
+								$repeat = new Repeat;
+								$repeat->left = ($direction == 'forward');
+								$repeat->right = ($direction == 'backward');
+								$part->endings[] = $repeat;
+							}
 
-						$x_double = $x_barlines->xpath('bar-style');
-						if (!empty($x_double)) {
-							assert('count($x_double)===1');
-							$x_double = $x_double[0];
-							$style = (string) $x_double;
-							if ($style == 'light-light') {
-								$part->endings[] = new DoubleBar;
+							$x_double = $x_barline->xpath('bar-style');
+							if (!empty($x_double)) {
+								assert('count($x_double)===1');
+								$x_double = $x_double[0];
+								$style = (string) $x_double;
+								if ($style == 'light-light') {
+									$part->endings[] = new DoubleBar;
+								}
 							}
 						}
 					}

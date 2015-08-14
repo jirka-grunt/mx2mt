@@ -1,0 +1,9 @@
+Version 1.1
+===========
+
+Bugs fixed
+----------
+
+- Better bar lines processing. Left and right bar lines from XML are
+  merged to catch both voltas and repeats.
+
