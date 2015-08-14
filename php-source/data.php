@@ -102,6 +102,7 @@
 
 	class Note extends Duration {
 		public $height;
+		public $alter;
 		public $nolyr;
 	}
 

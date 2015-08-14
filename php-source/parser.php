@@ -141,6 +141,8 @@
 		protected function getDuration($x_note) {
 			$rest = FALSE;
 			$pointed = 0;
+			$alter = NULL;
+			$accidental = NULL;
 			$beams = array();
 			foreach ($x_note as $info) {
 				$name = $info->getName();
@@ -151,8 +153,19 @@
 						if (!isset($this->pitches[$octave][$step])) {
 							return $this->getUnsupported('NOTE PITCH', 'octave: '.$octave.', step: '.$step);
 						}
-						// TODO: alter - sharp/flat
 						$height = $this->pitches[$octave][$step];
+						if (isset($info->alter)) {
+							$alter = (string) $info->alter;
+							if (!in_array($alter, array('-1', '1'))) {
+								return $this->getUnsupported('PITCH ALTER', 'value: '.$alter);
+							}
+						}
+						break;
+					case 'accidental':
+						$accidental = (string) $info;
+						if (!in_array($accidental, array('sharp', 'natural'))) {
+							return $this->getUnsupported('ACCIDENTAL', 'name: '.$accidental);
+						}
 						break;
 					case 'type':
 						$type = (string) $info;
@@ -190,6 +203,11 @@
 					$duration = new Note();
 				}
 				$duration->height = $height;
+				if ($accidental === 'natural') {
+					$duration->alter = 0;
+				} elseif ($accidental === 'sharp') {
+					$duration->alter = (int) $alter;
+				}
 			} elseif ($rest) {
 				$duration = new Pause;
 			} else {

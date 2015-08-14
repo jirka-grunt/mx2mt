@@ -16,6 +16,7 @@ Supported features:
 - ordinary notes and rests
 - lengths: from 1/16 to whole note
 - heights: from C2 to H6 (5 octaves)
+- accidentals: sharp, natural, flat
 - single dots from 1/8 notes and rests
 - beams: single, duble, partial, dotted
 - slurs and ties
@@ -39,4 +40,4 @@ Known limitations:
 - automatic orientation of stems, beams, slurs and ties
 
 As MusicXML is pretty complex format there definitely are plenty of unknown limitations.
-
+Moreover, conversion is tested only with XML exported from Mozart version 12.

@@ -282,7 +282,11 @@
 		}
 
 		protected function getNote(Note $note) {
-			return $this->nl($note->nolyr).$this->getConnections($note).$this->note[$note->long].' '.$this->ht($note);
+			$nl = $this->nl($note->nolyr);
+			$conn = $this->getConnections($note);
+			$lng = $this->note[$note->long];
+			$hta = $this->hta($note, ' ');
+			return $nl.$conn.$lng.$hta;
 		}
 
 		protected function getBeamStart(BeamStart $beam) {
@@ -293,9 +297,10 @@
 			$nr = $this->nr($beam->number);
 			$sl = $this->nr($beam->slant);
 			$ht = $this->ht($beam);
+			$hta = $this->hta($beam);
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
-			return $nl.$conn.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.'\qb'.$pt.$nr.$ht;
+			return $nl.$conn.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getBeamContinue(BeamContinue $beam) {
@@ -304,10 +309,10 @@
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
 			$change = $this->change($beam->change, $nr, $bu);
-			$ht = $this->ht($beam);
+			$hta = $this->hta($beam);
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
-			return $nl.$conn.$change.$partial.'\qb'.$pt.$nr.$ht;
+			return $nl.$conn.$change.$partial.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getBeamEnd(BeamEnd $beam) {
@@ -316,10 +321,10 @@
 			$bb = $this->bb($beam->multiplicity);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
-			$ht = $this->ht($beam);
+			$hta = $this->hta($beam);
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
-			return $nl.$conn.$partial.'\tb'.$bu.$nr.'\qb'.$pt.$nr.$ht;
+			return $nl.$conn.$partial.'\tb'.$bu.$nr.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getConnections(Duration $note) {
@@ -371,6 +376,25 @@
 
 		protected function ht(Note $note) {
 			return $this->pitches[$note->height];
+		}
+
+		protected function hta(Note $note, $addit='') {
+			$height = $this->ht($note);
+			if (is_null($note->alter)) {
+				return $addit.$height;
+			}
+			switch ($note->alter) {
+				case -1:
+					$height = '_'.$height;
+					break;
+				case 0:
+					$height = '='.$height;
+					break;
+				case 1:
+					$height = '^'.$height;
+					break;
+			}
+			return '{'.$height.'}';
 		}
 
 		protected function nl($nolyr) {
