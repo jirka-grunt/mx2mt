@@ -384,6 +384,9 @@
 				return $addit.$height;
 			}
 			switch ($note->alter) {
+				case -2:
+					$height = '<'.$height;
+					break;
 				case -1:
 					$height = '_'.$height;
 					break;
@@ -392,6 +395,9 @@
 					break;
 				case 1:
 					$height = '^'.$height;
+					break;
+				case 2:
+					$height = '>'.$height;
 					break;
 			}
 			return '{'.$height.'}';

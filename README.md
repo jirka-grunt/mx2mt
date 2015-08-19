@@ -16,7 +16,7 @@ Supported features:
 - ordinary notes and rests
 - lengths: from 1/16 to whole note
 - heights: from C2 to H6 (5 octaves)
-- accidentals: sharp, natural, flat
+- accidentals: sharp, double sharp, natural, flat, double flat
 - single dots from 1/8 notes and rests
 - beams: single, duble, partial, dotted
 - slurs and ties

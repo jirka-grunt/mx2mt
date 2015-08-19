@@ -156,14 +156,14 @@
 						$height = $this->pitches[$octave][$step];
 						if (isset($info->alter)) {
 							$alter = (string) $info->alter;
-							if (!in_array($alter, array('-1', '1'))) {
+							if (!in_array($alter, array('-2', '-1', '1', '2'))) {
 								return $this->getUnsupported('PITCH ALTER', 'value: '.$alter);
 							}
 						}
 						break;
 					case 'accidental':
 						$accidental = (string) $info;
-						if (!in_array($accidental, array('sharp', 'natural'))) {
+						if (!in_array($accidental, array('double-sharp', 'sharp', 'natural'))) {
 							return $this->getUnsupported('ACCIDENTAL', 'name: '.$accidental);
 						}
 						break;
@@ -205,7 +205,7 @@
 				$duration->height = $height;
 				if ($accidental === 'natural') {
 					$duration->alter = 0;
-				} elseif ($accidental === 'sharp') {
+				} elseif (!\is_null($accidental)) {
 					$duration->alter = (int) $alter;
 				}
 			} elseif ($rest) {
