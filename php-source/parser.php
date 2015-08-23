@@ -61,6 +61,7 @@
 					}
 
 					$x_notes = $x_part->xpath('note');
+					$previous = NULL;
 					foreach ($x_notes as $x_note) {
 						$duration = $this->getDuration($x_note);
 
@@ -86,7 +87,16 @@
 							$duration->connections[] = $slur;
 						}
 
+						$x_chord = $x_note->xpath('chord');
+						if (!empty($x_chord)) {
+							assert('$previous instanceof Note');
+							assert('get_class($duration)==="Note"');
+							$previous->chords[] = $duration;
+							continue;
+						}
+
 						$part->durations[] = $duration;
+						$previous = $duration;
 					}
 
 					$x_barlines = $x_part->xpath('barline');

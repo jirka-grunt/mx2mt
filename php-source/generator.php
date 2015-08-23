@@ -30,6 +30,18 @@
 				24 => '\whp',
 			);
 
+		protected $znote = array(
+				1  => '\zqp',
+				2  => '\zq',
+				3  => '\zqp',
+				4  => '\zq',
+				6  => '\zqp',
+				8  => '\zh',
+				12 => '\zhp',
+				16 => '\zwh',
+				24 => '\zwhp',
+			);
+
 		protected $pause = array(
 				1  => '\qs',
 				2  => '\ds',
@@ -286,7 +298,8 @@
 			$conn = $this->getConnections($note);
 			$lng = $this->note[$note->long];
 			$hta = $this->hta($note, ' ');
-			return $nl.$conn.$lng.$hta;
+			$znotes = $this->getZNotes($note);
+			return $nl.$conn.$znotes.$lng.$hta;
 		}
 
 		protected function getBeamStart(BeamStart $beam) {
@@ -300,7 +313,8 @@
 			$hta = $this->hta($beam);
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
-			return $nl.$conn.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.'\qb'.$pt.$nr.$hta;
+			$znotes = $this->getZBeams($beam, $nr);
+			return $nl.$conn.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getBeamContinue(BeamContinue $beam) {
@@ -312,7 +326,8 @@
 			$hta = $this->hta($beam);
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
-			return $nl.$conn.$change.$partial.'\qb'.$pt.$nr.$hta;
+			$znotes = $this->getZBeams($beam, $nr);
+			return $nl.$conn.$change.$partial.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getBeamEnd(BeamEnd $beam) {
@@ -324,7 +339,8 @@
 			$hta = $this->hta($beam);
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
-			return $nl.$conn.$partial.'\tb'.$bu.$nr.'\qb'.$pt.$nr.$hta;
+			$znotes = $this->getZBeams($beam, $nr);
+			return $nl.$conn.$partial.'\tb'.$bu.$nr.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getConnections(Duration $note) {
@@ -353,6 +369,26 @@
 			return $connections;
 		}
 
+		protected function getZNotes(Note $note) {
+			$result = '';
+			foreach ($note->chords as $chord) {
+				$lng = $this->znote[$chord->long];
+				$hta = $this->hta($chord, ' ');
+				$result .= $lng.$hta;
+			}
+			return $result;
+		}
+
+		protected function getZBeams(Beam $note, $nr) {
+			$result = '';
+			foreach ($note->chords as $chord) {
+				$lng = '\zqb';
+				$pt = $this->pt($chord->long);
+				$hta = $this->hta($chord);
+				$result .= $lng.$pt.$nr.$hta;
+			}
+			return $result;
+		}
 
 		protected function change($change, $nr, $bu) {
 			if ($change > 0) {

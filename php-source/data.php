@@ -104,6 +104,7 @@
 		public $height;
 		public $alter;
 		public $nolyr;
+		public $chords = array();
 	}
 
 
