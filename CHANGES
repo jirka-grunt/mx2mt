@@ -14,3 +14,5 @@ Bugs fixed
 - Better bar lines processing. Left and right bar lines from XML are
   merged to catch both voltas and repeats.
 
+- Measures longer than whole note (like 12/8) are now supported.
+

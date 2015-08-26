@@ -16,6 +16,10 @@
 		public function getDuration() {
 			return array_splice($this->durations, 0, 1);
 		}
+
+		public function isEmpty() {
+			return empty($this->durations);
+		}
 	}
 
 	class BeamState {
@@ -392,9 +396,11 @@
 			}
 
 			$nil = new Nil;
-			for($i=1; $i<=16; $i++) {
+			$i = 1;
+			while (TRUE) {
 				$min = self::NOTHING;
 				$result = array();
+				$break = TRUE;
 				foreach ($parts as $index => $part) {
 					if ($part->forward > 0) {
 						$part->forward--;
@@ -416,6 +422,9 @@
 							}
 						}
 					}
+					if (!$part->isEmpty()) {
+						$break = FALSE;
+					}
 				}
 				if ($min != self::NOTHING) {
 					$notes = new Notes;
@@ -423,6 +432,10 @@
 					$notes->parts = $result;
 					$this->notation->elements[] = $notes;
 				}
+				if ($break) {
+					break;
+				}
+				$i++;
 			}
 		}
 
