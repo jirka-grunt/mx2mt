@@ -366,6 +366,9 @@
 						break;
 				}
 			}
+			foreach ($note->chords as $chord) {
+				$connections .= $this->getConnections($chord);
+			}
 			return $connections;
 		}
 

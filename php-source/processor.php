@@ -158,12 +158,69 @@
 							if ($connection instanceof ConnectionStart) {
 								assert('$under[$number]===FALSE');
 								$under[$number] = TRUE;
+								// TODO: orientation of beams
 								$connection->up = ($duration->height >= self::UP_LIMIT);
 							} else {
 								assert('$under[$number]===TRUE');
 								$under[$number] = FALSE;
 							}
-							$connection->number = $number;
+						}
+					}
+				}
+			}
+
+			$slurs = array();
+			$ties = array();
+			for ($i=1; $i<=6; $i++) {
+				$slurs[$i] = -1;
+				$ties[$i] = -1;
+			}
+			$used = array();
+			for ($i=0; $i<=8; $i++) {
+				$used[$i] = FALSE;
+			}
+			foreach ($music->measures as $measure) {
+				foreach ($measure->parts as $pindex => $part) {
+					foreach ($part->durations as $duration) {
+						$connections = $duration->connections;
+						if ($duration instanceof Note) {
+							foreach ($duration->chords as $chord) {
+								$connections = array_merge($connections, $chord->connections);
+							}
+						}
+						foreach ($connections as $connection) {
+							$number = $connection->number;
+							$renumber = -1;
+							if ($connection instanceof ConnectionStart) {
+								foreach ($used as $key=>$isUsed) {
+									if (!$isUsed) {
+										$renumber = $key;
+										$used[$key] = TRUE;
+										break;
+									}
+								}
+								assert('$renumber !== -1');
+								if ($connection instanceof SlurStart) {
+									assert('$slurs[$number] === -1');
+									$slurs[$number] = $renumber;
+								} else {
+									assert('$ties[$number] === -1');
+									$ties[$number] = $renumber;
+								}
+							} else {
+								if ($connection instanceof SlurEnd) {
+									assert('$slurs[$number] !== -1');
+									$renumber = $slurs[$number];
+									$slurs[$number] = -1;
+								} else {
+									assert('$ties[$number] !== -1');
+									$renumber = $ties[$number];
+									$ties[$number] = -1;
+								}
+								assert('$renumber !== -1');
+								$used[$renumber] = FALSE;
+							}
+							$connection->number = $renumber;
 						}
 					}
 				}

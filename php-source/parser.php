@@ -73,6 +73,7 @@
 							} elseif ($type == 'stop') {
 								$tie = new TieEnd;
 							}
+							$tie->number = (int) $x_tie['number'];
 							$duration->connections[] = $tie;
 						}
 
@@ -84,6 +85,7 @@
 							} elseif ($type == 'stop') {
 								$slur = new SlurEnd;
 							}
+							$slur->number = (int) $x_slur['number'];
 							$duration->connections[] = $slur;
 						}
 
