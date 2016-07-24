@@ -20,3 +20,5 @@ Bugs fixed
 
 - better processing of some unsupported features
 
+- function for numbering slurs/ties now works with multiple stuffs
+

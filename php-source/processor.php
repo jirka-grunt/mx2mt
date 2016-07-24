@@ -58,7 +58,7 @@
 
 		public function getNotation(Music $music) {
 			$this->computeBeams($music);
-			$this->computeConnections($music);
+			$this->computeNolyrs($music);
 			$this->repareDoubles($music);
 			$this->repareRepeats($music);
 
@@ -77,6 +77,8 @@
 			}
 			$this->division->status = DivisionStatus::END;
 			$this->addDivision($first->endings);
+
+			$this->renumberConnections(count($parts));
 			return $this->notation;
 		}
 
@@ -137,7 +139,7 @@
 			}
 		}
 
-		protected function computeConnections(Music $music) {
+		protected function computeNolyrs(Music $music) {
 			$measure = reset($music->measures);
 			$count = count($measure->parts);
 			$under=array();
@@ -175,60 +177,69 @@
 					}
 				}
 			}
+		}
 
+		protected function renumberConnections($parts) {
 			$slurs = array();
 			$ties = array();
-			for ($i=1; $i<=6; $i++) {
-				$slurs[$i] = -1;
-				$ties[$i] = -1;
+			for ($i=0; $i<$parts; $i++) {
+				for ($j=1; $j<=6; $j++) {
+					$slurs[$i][$j] = -1;
+					$ties[$i][$j] = -1;
+				}
 			}
 			$used = array();
 			for ($i=0; $i<=8; $i++) {
 				$used[$i] = FALSE;
 			}
-			foreach ($music->measures as $measure) {
-				foreach ($measure->parts as $pindex => $part) {
-					foreach ($part->durations as $duration) {
-						$connections = $duration->connections;
-						if ($duration instanceof Note) {
-							foreach ($duration->chords as $chord) {
-								$connections = array_merge($connections, $chord->connections);
-							}
+
+			foreach ($this->notation->elements as $element) {
+				if (!($element instanceof Notes)) {
+					continue;
+				}
+				foreach ($element->parts as $part => $duration) {
+					if (!($duration instanceof Duration)) {
+						continue;
+					}
+					$connections = $duration->connections;
+					if ($duration instanceof Note) {
+						foreach ($duration->chords as $chord) {
+							$connections = array_merge($connections, $chord->connections);
 						}
-						foreach ($connections as $connection) {
-							$number = $connection->number;
-							$renumber = -1;
-							if ($connection instanceof ConnectionStart) {
-								foreach ($used as $key=>$isUsed) {
-									if (!$isUsed) {
-										$renumber = $key;
-										$used[$key] = TRUE;
-										break;
-									}
+					}
+					foreach ($connections as $connection) {
+						$number = $connection->number;
+						$renumber = -1;
+						if ($connection instanceof ConnectionStart) {
+							foreach ($used as $key=>$isUsed) {
+								if (!$isUsed) {
+									$renumber = $key;
+									$used[$key] = TRUE;
+									break;
 								}
-								assert('$renumber !== -1');
-								if ($connection instanceof SlurStart) {
-									assert('$slurs[$number] === -1');
-									$slurs[$number] = $renumber;
-								} else {
-									assert('$ties[$number] === -1');
-									$ties[$number] = $renumber;
-								}
+							}
+							assert('$renumber !== -1');
+							if ($connection instanceof SlurStart) {
+								assert('$slurs[$part][$number] === -1');
+								$slurs[$part][$number] = $renumber;
 							} else {
-								if ($connection instanceof SlurEnd) {
-									assert('$slurs[$number] !== -1');
-									$renumber = $slurs[$number];
-									$slurs[$number] = -1;
-								} else {
-									assert('$ties[$number] !== -1');
-									$renumber = $ties[$number];
-									$ties[$number] = -1;
-								}
-								assert('$renumber !== -1');
-								$used[$renumber] = FALSE;
+								assert('$ties[$part][$number] === -1');
+								$ties[$part][$number] = $renumber;
 							}
-							$connection->number = $renumber;
+						} else {
+							if ($connection instanceof SlurEnd) {
+								assert('$slurs[$part][$number] !== -1');
+								$renumber = $slurs[$part][$number];
+								$slurs[$part][$number] = -1;
+							} else {
+								assert('$ties[$part][$number] !== -1');
+								$renumber = $ties[$part][$number];
+								$ties[$part][$number] = -1;
+							}
+							assert('$renumber !== -1');
+							$used[$renumber] = FALSE;
 						}
+						$connection->number = $renumber;
 					}
 				}
 			}
