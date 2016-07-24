@@ -149,6 +149,9 @@
 			foreach ($music->measures as $measure) {
 				foreach ($measure->parts as $pindex => $part) {
 					foreach ($part->durations as $duration) {
+						if ($duration instanceof Unsupported) {
+							continue;
+						}
 						$number = 2 * $pindex;
 						if ($duration instanceof Note) {
 							$duration->nolyr = ($under[$number] || $under[$number+1]);

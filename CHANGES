@@ -18,3 +18,5 @@ Bugs fixed
 
 - PHP 5.5+ is supported (Generator is now language internal class)
 
+- better processing of some unsupported features
+
