@@ -1,6 +1,6 @@
 <?php
 
-	class Generator {
+	class Creator {
 
 		protected $text = '';
 

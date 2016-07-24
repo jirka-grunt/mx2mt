@@ -3,7 +3,7 @@
 	require_once 'data.php';
 	require_once 'parser.php';
 	require_once 'processor.php';
-	require_once 'generator.php';
+	require_once 'creator.php';
 
 	class Converter {
 
@@ -25,7 +25,7 @@
 			$processor = new Processor();
 			$notation = $processor->getNotation($music);
 
-			$generator = new Generator();
+			$generator = new Creator();
 			return $generator->getTex($notation);
 		}
 
