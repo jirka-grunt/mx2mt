@@ -22,3 +22,6 @@ Bugs fixed
 
 - Function for numbering slurs/ties now works with multiple stuffs.
 
+- Spacing for pointed whole note fixed (MusiXTeX has no such spacing,
+  so version for regular whole note is used).
+

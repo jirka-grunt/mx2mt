@@ -15,7 +15,7 @@
 				8  => '\NOTes',
 				12 => '\NOTesp',
 				16 => '\NOTEs',
-				24 => '\NOTEsp',
+				24 => '\NOTEs',
 			);
 
 		protected $note = array(
