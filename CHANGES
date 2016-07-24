@@ -18,7 +18,7 @@ Bugs fixed
 
 - PHP 5.5+ is supported (Generator is now language internal class)
 
-- better processing of some unsupported features
+- Better processing of some unsupported features.
 
-- function for numbering slurs/ties now works with multiple stuffs
+- Function for numbering slurs/ties now works with multiple stuffs.
 
