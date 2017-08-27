@@ -5,11 +5,12 @@
 		private $pitches = array();
 
 		private $types = array(
-				'16th'    => 1,
-				'eighth'  => 2,
-				'quarter' => 4,
-				'half'    => 8,
-				'whole'   => 16,
+				'32nd'    => 1,
+				'16th'    => 2,
+				'eighth'  => 4,
+				'quarter' => 8,
+				'half'    => 16,
+				'whole'   => 32,
 			);
 
 		protected $measureNumber;
@@ -203,7 +204,7 @@
 			}
 			if ($pointed == 1) {
 				if ($long == 1) {
-					return $this->getUnsupported('DOT FOR 16th', 'octave: '.$octave.', step: '.$step);
+					return $this->getUnsupported('DOT FOR 32nd', 'octave: '.$octave.', step: '.$step);
 				}
 				$long *= 1.5;
 			}
@@ -271,7 +272,7 @@
 				$duration->multiplicity = count($end);
 			}
 			assert('!is_null($duration)');
-			if ($duration->multiplicity > 2) {
+			if ($duration->multiplicity > 3) {
 				return $this->getUnsupported('BEAM MULTIPLICITY', 'count: '.$duration->multiplicity);
 			}
 			if ($partial == 1) {

@@ -14,10 +14,10 @@ Supported features:
 - meters: with single denominator
 - keys: flats or sharps
 - ordinary notes and rests
-- lengths: from 1/16 to whole note
+- lengths: from 1/32 to whole note
 - heights: from C2 to H6 (5 octaves)
 - accidentals: sharp, double sharp, natural, flat, double flat
-- single dots from 1/8 notes and rests
+- single dots from 1/16 notes and rests
 - chord (non-spacing) notes
 - beams: single, duble, partial, dotted
 - slurs and ties
