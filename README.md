@@ -18,6 +18,7 @@ Supported features:
 - heights: from C2 to H6 (5 octaves)
 - accidentals: sharp, double sharp, natural, flat, double flat
 - single dots from 1/16 notes and rests
+- articulations: accent, staccato
 - chord (non-spacing) notes
 - beams: single, duble, partial, dotted
 - slurs and ties

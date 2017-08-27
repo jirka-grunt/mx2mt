@@ -304,15 +304,17 @@
 		protected function getNote(Note $note) {
 			$nl = $this->nl($note->nolyr);
 			$conn = $this->getConnections($note);
+			$art = $this->getArticulation($note);
 			$lng = $this->note[$note->long];
 			$hta = $this->hta($note, ' ');
 			$znotes = $this->getZNotes($note);
-			return $nl.$conn.$znotes.$lng.$hta;
+			return $nl.$conn.$art.$znotes.$lng.$hta;
 		}
 
 		protected function getBeamStart(BeamStart $beam) {
 			$nl = $this->nl($beam->nolyr);
 			$conn = $this->getConnections($beam);
+			$art = $this->getArticulation($beam);
 			$bb = $this->bb($beam->multiplicity);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
@@ -322,12 +324,13 @@
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
 			$znotes = $this->getZBeams($beam, $nr);
-			return $nl.$conn.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.$znotes.'\qb'.$pt.$nr.$hta;
+			return $nl.$conn.$art.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getBeamContinue(BeamContinue $beam) {
 			$nl = $this->nl($beam->nolyr);
 			$conn = $this->getConnections($beam);
+			$art = $this->getArticulation($beam);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
 			$change = $this->change($beam->change, $nr, $bu);
@@ -335,12 +338,13 @@
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
 			$znotes = $this->getZBeams($beam, $nr);
-			return $nl.$conn.$change.$partial.$znotes.'\qb'.$pt.$nr.$hta;
+			return $nl.$conn.$art.$change.$partial.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getBeamEnd(BeamEnd $beam) {
 			$nl = $this->nl($beam->nolyr);
 			$conn = $this->getConnections($beam);
+			$art = $this->getArticulation($beam);
 			$bb = $this->bb($beam->multiplicity);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
@@ -348,7 +352,7 @@
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
 			$znotes = $this->getZBeams($beam, $nr);
-			return $nl.$conn.$partial.'\tb'.$bu.$nr.$znotes.'\qb'.$pt.$nr.$hta;
+			return $nl.$conn.$art.$partial.'\tb'.$bu.$nr.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getConnections(Duration $note) {
@@ -378,6 +382,24 @@
 				$connections .= $this->getConnections($chord);
 			}
 			return $connections;
+		}
+
+		protected function getArticulation(Note $note) {
+			$articulations = '';
+			foreach ($note->articulations as $articulation) {
+				$name = get_class($articulation);
+				$articulations .= '\\'.($articulation->below ? 'l' : 'u');
+				switch ($name) {
+					case 'Accent':
+						$articulations .= 'sf ';
+						break;
+					case 'Staccato':
+						$articulations .= 'pz ';
+						break;
+				}
+				$articulations .= $this->ht($note);
+			}
+			return $articulations;
 		}
 
 		protected function getZNotes(Note $note) {

@@ -105,6 +105,7 @@
 		public $alter;
 		public $nolyr;
 		public $chords = array();
+		public $articulations = array();
 	}
 
 
@@ -149,5 +150,17 @@
 	}
 
 	class SlurEnd extends ConnectionEnd {
+	}
+
+	// ----- articulations -----
+
+	abstract class Articulation {
+		public $below;
+	}
+
+	class Accent extends Articulation {
+	}
+
+	class Staccato extends Articulation {
 	}
 

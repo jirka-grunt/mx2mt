@@ -90,6 +90,24 @@
 							$duration->connections[] = $slur;
 						}
 
+						$x_accents = $x_note->xpath('notations/articulations/accent');
+						foreach ($x_accents as $x_accent) {
+							assert('$duration instanceof Note');
+							$placement = (string) $x_accent['placement'];
+							$accent = new Accent;
+							$accent->below = $placement == 'below';
+							$duration->articulations[] = $accent;
+						}
+
+						$x_staccatos = $x_note->xpath('notations/articulations/staccato');
+						foreach ($x_staccatos as $x_staccato) {
+							assert('$duration instanceof Note');
+							$placement = (string) $x_staccato['placement'];
+							$staccato = new Staccato;
+							$staccato->below = $placement == 'below';
+							$duration->articulations[] = $staccato;
+						}
+
 						$x_chord = $x_note->xpath('chord');
 						if (!empty($x_chord)) {
 							assert('$previous instanceof Note');
