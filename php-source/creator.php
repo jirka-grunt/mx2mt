@@ -455,7 +455,8 @@
 		}
 
 		protected function nr($number) {
-			return ($number>=0 && $number<=9) ? $number : '{'.$number.'}' ;
+			$number = (string) $number;
+			return (strlen($number) > 1) ? '{'.$number.'}' : $number;
 		}
 
 		protected function bb($count) {

@@ -27,3 +27,5 @@ Bugs fixed
 - Spacing for pointed whole note fixed (MusiXTeX has no such spacing,
   so version for regular whole note is used).
 
+- Voltas different from single digit are supported.
+
