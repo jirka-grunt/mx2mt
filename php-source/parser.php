@@ -90,6 +90,12 @@
 							$duration->connections[] = $slur;
 						}
 
+						$x_fermatas = $x_note->xpath('notations/fermata');
+						foreach ($x_fermatas as $x_fermata) {
+							$type = (string) $x_fermata['type'];
+							$duration->fermata = ($type != 'inverted');
+						}
+
 						$x_accents = $x_note->xpath('notations/articulations/accent');
 						foreach ($x_accents as $x_accent) {
 							assert('$duration instanceof Note');

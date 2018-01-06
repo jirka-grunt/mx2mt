@@ -18,7 +18,7 @@ Supported features:
 - heights: from C2 to H6 (5 octaves)
 - accidentals: sharp, double sharp, natural, flat, double flat
 - single dots from 1/16 notes and rests
-- articulations: accent, staccato
+- articulations: accent, staccato, fermata
 - chord (non-spacing) notes
 - beams: single, duble, partial, dotted
 - slurs and ties
@@ -39,6 +39,7 @@ Known limitations:
 - repeats only one bar long don't work (not really limitation)
 - bar lines & voltas are synchronized over all staffs (and taken from first staff)
 - number of staffs can't be changed
+- fermatas have fixed height
 - automatic orientation of stems, beams, slurs and ties
 
 As MusicXML is pretty complex format there definitely are plenty of unknown limitations.

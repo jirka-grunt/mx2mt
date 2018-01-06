@@ -298,23 +298,27 @@
 
 
 		protected function getPause(Pause $pause) {
-			return $this->pause[$pause->long];
+			$fe = $this->getFermata($pause);
+			$ps = $this->pause[$pause->long];
+			return $fe.$ps;
 		}
 
 		protected function getNote(Note $note) {
 			$nl = $this->nl($note->nolyr);
 			$conn = $this->getConnections($note);
 			$art = $this->getArticulation($note);
+			$fe = $this->getFermata($note);
 			$lng = $this->note[$note->long];
 			$hta = $this->hta($note, ' ');
 			$znotes = $this->getZNotes($note);
-			return $nl.$conn.$art.$znotes.$lng.$hta;
+			return $nl.$conn.$art.$fe.$znotes.$lng.$hta;
 		}
 
 		protected function getBeamStart(BeamStart $beam) {
 			$nl = $this->nl($beam->nolyr);
 			$conn = $this->getConnections($beam);
 			$art = $this->getArticulation($beam);
+			$fe = $this->getFermata($beam);
 			$bb = $this->bb($beam->multiplicity);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
@@ -324,13 +328,14 @@
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
 			$znotes = $this->getZBeams($beam, $nr);
-			return $nl.$conn.$art.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.$znotes.'\qb'.$pt.$nr.$hta;
+			return $nl.$conn.$art.$fe.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getBeamContinue(BeamContinue $beam) {
 			$nl = $this->nl($beam->nolyr);
 			$conn = $this->getConnections($beam);
 			$art = $this->getArticulation($beam);
+			$fe = $this->getFermata($beam);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
 			$change = $this->change($beam->change, $nr, $bu);
@@ -338,13 +343,14 @@
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
 			$znotes = $this->getZBeams($beam, $nr);
-			return $nl.$conn.$art.$change.$partial.$znotes.'\qb'.$pt.$nr.$hta;
+			return $nl.$conn.$art.$fe.$change.$partial.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getBeamEnd(BeamEnd $beam) {
 			$nl = $this->nl($beam->nolyr);
 			$conn = $this->getConnections($beam);
 			$art = $this->getArticulation($beam);
+			$fe = $this->getFermata($beam);
 			$bb = $this->bb($beam->multiplicity);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
@@ -352,7 +358,7 @@
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
 			$znotes = $this->getZBeams($beam, $nr);
-			return $nl.$conn.$art.$partial.'\tb'.$bu.$nr.$znotes.'\qb'.$pt.$nr.$hta;
+			return $nl.$conn.$art.$fe.$partial.'\tb'.$bu.$nr.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getConnections(Duration $note) {
@@ -382,6 +388,24 @@
 				$connections .= $this->getConnections($chord);
 			}
 			return $connections;
+		}
+
+		protected function getFermata(Duration $duration) {
+			if (!is_bool($duration->fermata)) {
+				return '';
+			}
+			if ($duration->fermata) {
+				$fermata = 'fermataup l';
+			} else {
+				$fermata = 'fermatadown f';
+			}
+			if ($duration instanceof Note) {
+				$lng = $this->note[$duration->long];
+				if (substr($lng, 1, 2) == 'wh') {
+					$fermata = ucfirst($fermata);
+				}
+			}
+			return '\\'.$fermata;
 		}
 
 		protected function getArticulation(Note $note) {

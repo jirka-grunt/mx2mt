@@ -95,6 +95,7 @@
 	abstract class Duration {
 		public $long;
 		public $connections = array();
+		public $fermata;
 	}
 
 	class Pause extends Duration {
