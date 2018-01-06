@@ -494,7 +494,7 @@
 		}
 
 		protected function pt($long) {
-			return (($long != 1) && ($long % 2 == 1)) ? 'p' : '';
+			return ($long % 3 == 0) ? 'p' : '';
 		}
 
 		protected function add($line) {
