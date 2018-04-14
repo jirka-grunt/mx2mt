@@ -19,26 +19,26 @@ Supported features:
 - accidentals: sharp, double sharp, natural, flat, double flat
 - single dots from 1/16 notes and rests
 - articulations: accent, staccato, fermata
-- chord (non-spacing) notes
 - beams: single, duble, partial, dotted
 - slurs and ties
 - repeats: left, right, both
 - endings: begin and end volta
 - double bar lines
-- multiple staffs
+- chord (non-spacing) notes
+- multiple staves
 
 Some features may be added or extended in future (but most of them probably not).
 
 Additional features:
-- correct vertical alignment with multiple staffs
+- correct vertical alignment with multiple staves
 - merging meters/signatures to general ones when possible
 - automatic orientation of stems, beams, slurs and ties
 
 Known limitations:
 - only beams non-overlapping within one staff are supported
 - repeats only one bar long don't work (not really limitation)
-- bar lines & voltas are synchronized over all staffs (and taken from first staff)
-- number of staffs can't be changed
+- bar lines & voltas are synchronized over all staves (and taken from first staff)
+- number of staves can't be changed
 - fermatas have fixed height
 - automatic orientation of stems, beams, slurs and ties
 
