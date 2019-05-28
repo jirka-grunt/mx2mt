@@ -101,6 +101,10 @@
 	class Pause extends Duration {
 	}
 
+	class FullPause extends Duration {
+		public $count;
+	}
+
 	class Note extends Duration {
 		public $height;
 		public $alter;

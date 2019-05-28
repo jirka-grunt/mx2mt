@@ -30,6 +30,7 @@
 
 		public function getMusic($xml) {
 			$music = new Music;
+			$multiple = 0;
 			$x_measures = $xml->xpath('//measure');
 			foreach ($x_measures as $x_measure) {
 				$this->measureNumber = (string) $x_measure['number'];
@@ -57,6 +58,14 @@
 									$signature->fifths = (string) $x_attribute->fifths;
 									$part->attributes[] = $signature;
 									break;
+								case 'measure-style':
+									if (isset($x_attribute->{'multiple-rest'})) {
+										$multiple = (int) $x_attribute->{'multiple-rest'};
+										$multiplePause = new FullPause;
+										$multiplePause->long = $this->types['whole'];
+										$multiplePause->count = $multiple;
+									}
+									break;
 							}
 						}
 					}
@@ -64,7 +73,18 @@
 					$x_notes = $x_part->xpath('note');
 					$previous = NULL;
 					foreach ($x_notes as $x_note) {
-						$duration = $this->getDuration($x_note);
+						if ($multiple !== 0) {
+							assert('count($x_notes) === 1');
+							$multiple--;
+							if (empty($multiplePause)) {
+								assert('isset($x_note->rest)');
+								continue 3;
+							}
+							$duration = $multiplePause;
+							unset($multiplePause);
+						} else {
+							$duration = $this->getDuration($x_note);
+						}
 
 						$x_ties = $x_note->xpath('notations/tied');
 						foreach ($x_ties as $x_tie) {

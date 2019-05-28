@@ -20,6 +20,7 @@ Supported features:
 - single dots from 1/16 notes and rests
 - articulations: accent, staccato, fermata
 - beams: single, duble, partial, dotted
+- multiple measures lasting rests
 - slurs and ties
 - repeats: left, right, both
 - endings: begin and end volta

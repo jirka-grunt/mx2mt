@@ -134,6 +134,10 @@
 						$fragment = $this->getPause($part);
 						$treat = FALSE;
 						break;
+					case 'FullPause':
+						$fragment = $this->getFullPause($part);
+						$treat = FALSE;
+						break;
 					case 'Note':
 						$fragment = $this->getNote($part);
 						break;
@@ -301,6 +305,19 @@
 			$fe = $this->getFermata($pause);
 			$ps = $this->pause[$pause->long];
 			return $fe.$ps;
+		}
+
+		protected function getFullPause(FullPause $pause) {
+			$nr = '\nr'.$this->nr($pause->count);
+			if ($pause->count === 2) {
+				$ps = '\PAuse';
+			} elseif ($pause->count === 4) {
+				$ps = '\PAUSe';
+			} else {
+				// TODO
+				$ps = '\pause';
+			}
+			return $nr.$ps;
 		}
 
 		protected function getNote(Note $note) {
