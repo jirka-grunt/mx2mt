@@ -45,3 +45,7 @@ Known limitations:
 
 As MusicXML is pretty complex format there definitely are plenty of unknown limitations.
 Moreover, conversion is tested only with XML exported from Mozart version 12.
+
+Note: You can also give a chance to xml2pmx tool (binary distribution only).
+It convers MusicXML to PMX format, which is pre-processor for MusixTeX. See
+[archive](https://icking-music-archive.org/software/htdocs/) for details.
