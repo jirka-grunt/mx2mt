@@ -157,6 +157,9 @@
 				if ($treat && ($i != $count)) {
 					$fragment .= '%';
 				}
+				if ($part instanceof Duration) {
+					$fragment = $this->getGchord($part->gchord).$fragment;
+				}
 				$parts[] = $fragment;
 				$i++;
 			}
@@ -376,6 +379,35 @@
 			$partial = $this->partial($beam->partial, $nr, $bu);
 			$znotes = $this->getZBeams($beam, $nr);
 			return $nl.$conn.$art.$fe.$partial.'\tb'.$bu.$nr.$znotes.'\qb'.$pt.$nr.$hta;
+		}
+		protected function getGchord(Chord $gchord=NULL) {
+			if (is_null($gchord)) {
+				return '';
+			}
+			if (!is_null($gchord->unsupported)) {
+				$this->writeUnsupported($gchord->unsupported);
+			}
+			$text = $gchord->base;
+			if ($gchord->alter === 1) {
+				$text .= '^\#';
+			} elseif ($gchord->alter === -1) {
+				$text .= '^b';
+			}
+			if ($gchord->minor) {
+				$text .= 'mi';
+			}
+			if ($gchord->plus === 1) {
+				$text .= '^{+}';
+			} elseif ($gchord->plus === -1) {
+				$text .= '^{-}';
+			}
+			if ($gchord->seven) {
+				$text .= '7';
+			}
+			if ($gchord->maj) {
+				$text .= '^{maj}';
+			}
+			return '\gchord{'.$text.'}';
 		}
 
 		protected function getConnections(Duration $note) {

@@ -96,6 +96,7 @@
 		public $long;
 		public $connections = array();
 		public $fermata;
+		public $gchord;
 	}
 
 	class Pause extends Duration {
@@ -167,5 +168,17 @@
 	}
 
 	class Staccato extends Articulation {
+	}
+
+	// ----- guitar -----
+
+	class Chord {
+		public $base;
+		public $unsupported;
+		public $minor = FALSE;
+		public $seven = FALSE;
+		public $alter = 0;
+		public $plus = 0;
+		public $maj = FALSE;
 	}
 

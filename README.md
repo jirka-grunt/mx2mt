@@ -27,6 +27,7 @@ Supported features:
 - double bar lines
 - chord (non-spacing) notes
 - multiple staves
+- guitar chords: major/minor, augmented/diminished, sevenths (with forenamed only)
 
 Some features may be added or extended in future (but most of them probably not).
 
@@ -42,6 +43,8 @@ Known limitations:
 - number of staves can't be changed
 - fermatas have fixed height
 - automatic orientation of stems, beams, slurs and ties
+- chords are translated to Czech notation only
+- augmented, diminished and half diminished seventh is not supported in chords
 
 As MusicXML is pretty complex format there definitely are plenty of unknown limitations.
 Moreover, conversion is tested only with XML exported from Mozart version 12.

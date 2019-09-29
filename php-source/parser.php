@@ -70,80 +70,137 @@
 						}
 					}
 
-					$x_notes = $x_part->xpath('note');
+					$x_notes = $x_part->xpath('(note|harmony)');
 					$previous = NULL;
+					$gchord = NULL;
 					foreach ($x_notes as $x_note) {
-						if ($multiple !== 0) {
-							assert('count($x_notes) === 1');
-							$multiple--;
-							if (empty($multiplePause)) {
-								assert('isset($x_note->rest)');
-								continue 3;
+						if ($x_note->getName() === 'harmony') {
+							$gchord = new Chord;
+							assert('isset($x_note->root->{\'root-step\'})');
+							$gchord->base = (string) $x_note->root->{'root-step'};
+							if (isset($x_note->kind)) {
+								$kind = (string) $x_note->kind;
+								switch ($kind) {
+									case 'major':
+										break;
+									case 'minor':
+										$gchord->minor = TRUE;
+										break;
+									case 'dominant':
+										$gchord->seven = TRUE;
+										break;
+									case 'minor-seventh':
+										$gchord->minor = TRUE;
+										$gchord->seven = TRUE;
+										break;
+									case 'augmented':
+										$gchord->plus = 1;
+										break;
+									case 'diminished':
+										$gchord->plus = -1;
+										break;
+									case 'major-seventh':
+										$gchord->seven = TRUE;
+										$gchord->maj = TRUE;
+										break;
+									case 'major-minor':
+										$gchord->minor = TRUE;
+										$gchord->seven = TRUE;
+										$gchord->maj = TRUE;
+										break;
+									default:
+										$gchord->unsupported = $this->getUnsupported('HARMONY KIND', $gchord->base.' '.$kind);
+								}
 							}
-							$duration = $multiplePause;
-							unset($multiplePause);
+							if (isset($x_note->root->{'root-alter'})) {
+								$alter = (string) $x_note->root->{'root-alter'};
+								switch ($alter) {
+									case '1':
+										$gchord->alter = 1;
+										break;
+									case '-1':
+										$gchord->alter = -1;
+										break;
+									default:
+										$gchord->unsupported = $this->getUnsupported('HARMONY ALTER', $gchord->base.' '.$alter);
+								}
+							}
 						} else {
-							$duration = $this->getDuration($x_note);
-						}
-
-						$x_ties = $x_note->xpath('notations/tied');
-						foreach ($x_ties as $x_tie) {
-							$type = (string) $x_tie['type'];
-							if ($type == 'start') {
-								$tie = new TieStart;
-							} elseif ($type == 'stop') {
-								$tie = new TieEnd;
+							if ($multiple !== 0) {
+								assert('count($x_notes) === 1');
+								$multiple--;
+								if (empty($multiplePause)) {
+									assert('isset($x_note->rest)');
+									continue 3;
+								}
+								$duration = $multiplePause;
+								unset($multiplePause);
+							} else {
+								$duration = $this->getDuration($x_note);
 							}
-							$tie->number = (int) $x_tie['number'];
-							$duration->connections[] = $tie;
-						}
 
-						$x_slurs = $x_note->xpath('notations/slur');
-						foreach ($x_slurs as $x_slur) {
-							$type = (string) $x_slur['type'];
-							if ($type == 'start') {
-								$slur = new SlurStart;
-							} elseif ($type == 'stop') {
-								$slur = new SlurEnd;
+							$x_ties = $x_note->xpath('notations/tied');
+							foreach ($x_ties as $x_tie) {
+								$type = (string) $x_tie['type'];
+								if ($type == 'start') {
+									$tie = new TieStart;
+								} elseif ($type == 'stop') {
+									$tie = new TieEnd;
+								}
+								$tie->number = (int) $x_tie['number'];
+								$duration->connections[] = $tie;
 							}
-							$slur->number = (int) $x_slur['number'];
-							$duration->connections[] = $slur;
-						}
 
-						$x_fermatas = $x_note->xpath('notations/fermata');
-						foreach ($x_fermatas as $x_fermata) {
-							$type = (string) $x_fermata['type'];
-							$duration->fermata = ($type != 'inverted');
-						}
+							$x_slurs = $x_note->xpath('notations/slur');
+							foreach ($x_slurs as $x_slur) {
+								$type = (string) $x_slur['type'];
+								if ($type == 'start') {
+									$slur = new SlurStart;
+								} elseif ($type == 'stop') {
+									$slur = new SlurEnd;
+								}
+								$slur->number = (int) $x_slur['number'];
+								$duration->connections[] = $slur;
+							}
 
-						$x_accents = $x_note->xpath('notations/articulations/accent');
-						foreach ($x_accents as $x_accent) {
-							assert('$duration instanceof Note');
-							$placement = (string) $x_accent['placement'];
-							$accent = new Accent;
-							$accent->below = $placement == 'below';
-							$duration->articulations[] = $accent;
-						}
+							$x_fermatas = $x_note->xpath('notations/fermata');
+							foreach ($x_fermatas as $x_fermata) {
+								$type = (string) $x_fermata['type'];
+								$duration->fermata = ($type != 'inverted');
+							}
 
-						$x_staccatos = $x_note->xpath('notations/articulations/staccato');
-						foreach ($x_staccatos as $x_staccato) {
-							assert('$duration instanceof Note');
-							$placement = (string) $x_staccato['placement'];
-							$staccato = new Staccato;
-							$staccato->below = $placement == 'below';
-							$duration->articulations[] = $staccato;
-						}
+							$x_accents = $x_note->xpath('notations/articulations/accent');
+							foreach ($x_accents as $x_accent) {
+								assert('$duration instanceof Note');
+								$placement = (string) $x_accent['placement'];
+								$accent = new Accent;
+								$accent->below = $placement == 'below';
+								$duration->articulations[] = $accent;
+							}
 
-						$x_chord = $x_note->xpath('chord');
-						if (!empty($x_chord)) {
-							assert('$previous instanceof Note');
-							assert('get_class($duration)==="Note"');
-							$previous->chords[] = $duration;
-							continue;
-						}
+							$x_staccatos = $x_note->xpath('notations/articulations/staccato');
+							foreach ($x_staccatos as $x_staccato) {
+								assert('$duration instanceof Note');
+								$placement = (string) $x_staccato['placement'];
+								$staccato = new Staccato;
+								$staccato->below = $placement == 'below';
+								$duration->articulations[] = $staccato;
+							}
 
-						$part->durations[] = $duration;
-						$previous = $duration;
+							$x_chord = $x_note->xpath('chord');
+							if (!empty($x_chord)) {
+								assert('$previous instanceof Note');
+								assert('get_class($duration)==="Note"');
+								$previous->chords[] = $duration;
+								continue;
+							}
+
+							$duration->gchord = $gchord;
+							$gchord = NULL;
+
+							$part->durations[] = $duration;
+							$previous = $duration;
+						}
 					}
 
 					$x_barlines = $x_part->xpath('barline');

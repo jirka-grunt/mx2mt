@@ -4,6 +4,9 @@ Version 1.2
 New features
 ------------
 
+- Basic support for guitar chords: major and minor, augmented and diminished,
+  sevens (with forementioned only)
+
 Bugs fixed
 ----------
 
