@@ -284,7 +284,13 @@
 		}
 
 		protected function writeMeter($part, Meter $meter) {
-			$type = '{\meterfrac{'.$meter->beats.'}{'.$meter->unit.'}}';
+			if (($meter->beats == 2) && ($meter->unit == 2)) {
+				$type = '\allabreve';
+			} elseif (($meter->beats == 4) && ($meter->unit == 4)) {
+				$type = '\meterC';
+			} else {
+				$type = '{\meterfrac{'.$meter->beats.'}{'.$meter->unit.'}}';
+			}
 			if ($part == 0) {
 				$this->add('\generalmeter'.$type.'%');
 			} else {

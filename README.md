@@ -11,7 +11,7 @@ You also need small [header.tex](https://github.com/jirka-grunt/mx2mt/blob/maste
 Supported features:
 - score-partwise and score-timewise XML
 - clefs: treble
-- meters: with single denominator
+- meters: with single denominator (C symbols for 2/2 and 4/4)
 - keys: flats or sharps
 - ordinary notes and rests
 - lengths: from 1/32 to whole note
