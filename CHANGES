@@ -12,6 +12,8 @@ Bugs fixed
 
 - Better default page layout handling.
 
+- Repeats at the very beginning and the very end of piece are handled correctly.
+
 
 Version 1.1
 ===========

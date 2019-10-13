@@ -183,8 +183,7 @@
 			$this->add('\Startpiece');
 			$this->add('% '.$start->number);
 			if ($start->leftRepeat) {
-				$this->add('\leftrepeat');
-				// TODO: \advance\barno by-1
+				$this->add('\zleftrepeat');
 			}
 		}
 
@@ -221,8 +220,10 @@
 		protected function writeEndPiece(EndPiece $end) {
 			if ($end->rightRepeat) {
 				$this->add('\setrightrepeat');
+				$this->add('\endpiece');
+			} else {
+				$this->add('\Endpiece');
 			}
-			$this->add('\Endpiece');
 		}
 
 		protected function writeAttributes(array $parts) {

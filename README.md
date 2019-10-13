@@ -38,7 +38,6 @@ Additional features:
 
 Known limitations:
 - only beams non-overlapping within one staff are supported
-- repeats only one bar long don't work (not really limitation)
 - bar lines & voltas are synchronized over all staves (and taken from first staff)
 - number of staves can't be changed
 - fermatas have fixed height

@@ -60,7 +60,7 @@
 			$this->computeBeams($music);
 			$this->computeNolyrs($music);
 			$this->repareDoubles($music);
-			$this->repareRepeats($music);
+			$last = $this->repareRepeats($music);
 
 			$this->division = new DivisionStatus();
 			$this->division->status = DivisionStatus::START;
@@ -76,7 +76,7 @@
 				$this->endVolta($first->endings);
 			}
 			$this->division->status = DivisionStatus::END;
-			$this->addDivision($first->endings);
+			$this->addDivision($last);
 
 			$this->renumberConnections(count($parts));
 			return $this->notation;
@@ -309,6 +309,16 @@
 				}
 				$add = $move;
 			}
+			$last = array();
+			foreach ($add as $index => $value) {
+				if ($value) {
+					$ending = new Repeat;
+					$ending->right = TRUE;
+					$ending->left = FALSE;
+					$last[$index] = $ending;
+				}
+			}
+			return $last;
 		}
 
 		protected function addDivision(array $endings, array $parts=array()) {
