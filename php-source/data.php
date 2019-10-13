@@ -180,5 +180,6 @@
 		public $alter = 0;
 		public $plus = 0;
 		public $maj = FALSE;
+		public $sus = 0;
 	}
 

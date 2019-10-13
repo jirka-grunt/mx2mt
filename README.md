@@ -27,7 +27,7 @@ Supported features:
 - double bar lines
 - chord (non-spacing) notes
 - multiple staves
-- guitar chords: major/minor, augmented/diminished, sevenths (with forenamed only)
+- guitar chords: major/minor, augmented/diminished, sevenths (with forenamed only), suspended
 
 Some features may be added or extended in future (but most of them probably not).
 

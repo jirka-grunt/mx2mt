@@ -108,6 +108,12 @@
 										$gchord->seven = TRUE;
 										$gchord->maj = TRUE;
 										break;
+									case 'suspended-second':
+										$gchord->sus = 2;
+										break;
+									case 'suspended-fourth':
+										$gchord->sus = 4;
+										break;
 									default:
 										$gchord->unsupported = $this->getUnsupported('HARMONY KIND', $gchord->base.' '.$kind);
 								}

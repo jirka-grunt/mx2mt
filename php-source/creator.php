@@ -396,6 +396,9 @@
 			if ($gchord->minor) {
 				$text .= 'mi';
 			}
+			if ($gchord->sus > 0) {
+				$text .= 'sus'.$gchord->sus;
+			}
 			if ($gchord->plus === 1) {
 				$text .= '^{+}';
 			} elseif ($gchord->plus === -1) {
