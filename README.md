@@ -42,7 +42,7 @@ Known limitations:
 - number of staves can't be changed
 - fermatas have fixed height
 - automatic orientation of stems, beams, slurs and ties
-- chords are translated to Czech notation only
+- guitar chords are in Czech (=German) notation: B -> H, Bb -> B
 - augmented, diminished and half diminished seventh is not supported in chords
 
 As MusicXML is pretty complex format there definitely are plenty of unknown limitations.

@@ -57,6 +57,7 @@
 
 
 		public function getNotation(Music $music) {
+			$this->repareGChords($music);
 			$this->computeBeams($music);
 			$this->computeNolyrs($music);
 			$this->repareDoubles($music);
@@ -82,6 +83,26 @@
 			return $this->notation;
 		}
 
+		protected function repareGChords(Music $music) {
+			foreach ($music->measures as $measure) {
+				foreach ($measure->parts as $pindex => $part) {
+					foreach ($part->durations as $duration) {
+						$chord = $duration->gchord;
+						if (empty($chord)) {
+							continue;
+						}
+						if (($chord->base == 'B') && ($chord->alter == -1)) {
+							$chord->alter = 0;
+							continue;
+						}
+						if ($chord->base == 'B') {
+							$chord->base = 'H';
+							continue;
+						}
+					}
+				}
+			}
+		}
 
 		protected function computeBeams(Music $music) {
 			$measure = reset($music->measures);
