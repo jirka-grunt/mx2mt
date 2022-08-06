@@ -18,6 +18,7 @@ Supported features:
 - heights: from C2 to H6 (5 octaves)
 - accidentals: sharp, double sharp, natural, flat, double flat
 - single dots from 1/16 notes and rests
+- tuplets: triplet and duplet
 - articulations: accent, staccato, fermata
 - beams: single, duble, partial, dotted
 - multiple measures lasting rests
@@ -40,7 +41,7 @@ Known limitations:
 - only beams non-overlapping within one staff are supported
 - bar lines & voltas are synchronized over all staves (and taken from first staff)
 - number of staves can't be changed
-- fermatas have fixed height
+- fermatas and tuplets have fixed height
 - automatic orientation of stems, beams, slurs and ties
 - guitar chords are in Czech (=German) notation: B -> H, Bb -> B
 - augmented, diminished and half diminished seventh is not supported in chords

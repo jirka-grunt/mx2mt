@@ -9,6 +9,8 @@ New features
 
 - Meters 2/2 and 4/4 are replaced with traditional C symbols.
 
+- Basic tuplets (triplets and duplets) are supported in standard situations.
+
 Bugs fixed
 ----------
 

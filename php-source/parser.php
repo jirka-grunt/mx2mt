@@ -73,6 +73,7 @@
 					$x_notes = $x_part->xpath('(note|harmony)');
 					$previous = NULL;
 					$gchord = NULL;
+					$tuplet = 0;
 					foreach ($x_notes as $x_note) {
 						if ($x_note->getName() === 'harmony') {
 							$gchord = new Chord;
@@ -167,6 +168,30 @@
 								}
 								$slur->number = (int) $x_slur['number'];
 								$duration->connections[] = $slur;
+							}
+
+							$x_tuplet = $x_note->xpath('time-modification');
+							if (!empty($x_tuplet)) {
+								assert('count($x_tuplet)===1');
+								$x_tuplet = $x_tuplet[0];
+								$actual = (int) $x_tuplet->{'actual-notes'};
+								$normal = (int) $x_tuplet->{'normal-notes'};
+								if (
+									(($actual == 3) && ($normal == 2))
+									||
+									(($actual == 2) && ($normal == 3))
+								) {
+									if ($tuplet == 0) {
+										$duration->tuplet = $actual;
+										$tuplet = $actual - 1;
+									} else {
+										$tuplet--;
+									}
+								} else {
+									$duration->tuplet = $this->getUnsupported('TUPLET', $actual.' for '.$normal);
+								}
+							} else {
+								assert('$tuplet===0');
 							}
 
 							$x_fermatas = $x_note->xpath('notations/fermata');

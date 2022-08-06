@@ -112,6 +112,7 @@
 		public $nolyr;
 		public $chords = array();
 		public $articulations = array();
+		public $tuplet;
 	}
 
 

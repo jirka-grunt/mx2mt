@@ -335,10 +335,11 @@
 			$conn = $this->getConnections($note);
 			$art = $this->getArticulation($note);
 			$fe = $this->getFermata($note);
+			$tu = $this->getTuplet($note);
 			$lng = $this->note[$note->long];
 			$hta = $this->hta($note, ' ');
 			$znotes = $this->getZNotes($note);
-			return $nl.$conn.$art.$fe.$znotes.$lng.$hta;
+			return $nl.$conn.$art.$fe.$tu.$znotes.$lng.$hta;
 		}
 
 		protected function getBeamStart(BeamStart $beam) {
@@ -346,6 +347,7 @@
 			$conn = $this->getConnections($beam);
 			$art = $this->getArticulation($beam);
 			$fe = $this->getFermata($beam);
+			$tu = $this->getTuplet($beam);
 			$bb = $this->bb($beam->multiplicity);
 			$bu = $this->bu($beam->up);
 			$nr = $this->nr($beam->number);
@@ -355,7 +357,7 @@
 			$pt = $this->pt($beam->long);
 			$partial = $this->partial($beam->partial, $nr, $bu);
 			$znotes = $this->getZBeams($beam, $nr);
-			return $nl.$conn.$art.$fe.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.$znotes.'\qb'.$pt.$nr.$hta;
+			return $nl.$conn.$art.$fe.$tu.'\i'.$bb.$bu.$nr.$ht.$sl.$partial.$znotes.'\qb'.$pt.$nr.$hta;
 		}
 
 		protected function getBeamContinue(BeamContinue $beam) {
@@ -465,6 +467,28 @@
 				}
 			}
 			return '\\'.$fermata;
+		}
+
+		protected function getTuplet(Note $duration) {
+			if (is_object($duration->tuplet)) {
+				$this->writeUnsupported($duration->tuplet);
+				return '';
+			}
+			if ($duration->tuplet == 3) {
+				if ($duration instanceof Beam) {
+					return '\triolet o';
+				} else {
+					return '\uptrio q20';
+				}
+			}
+			if ($duration->tuplet == 2) {
+				if ($duration instanceof Beam) {
+					return '\xtuplet2o';
+				} else {
+					return '\def\txt{2}\uptrio q10';
+				}
+			}
+			return '';
 		}
 
 		protected function getArticulation(Note $note) {
