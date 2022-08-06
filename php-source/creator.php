@@ -402,6 +402,9 @@
 			} elseif ($gchord->alter === -1) {
 				$text .= '^b';
 			}
+			if ($gchord->power) {
+				$text .= '5';
+			}
 			if ($gchord->minor) {
 				$text .= 'mi';
 			}

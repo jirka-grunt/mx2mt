@@ -5,7 +5,8 @@ New features
 ------------
 
 - Basic support for guitar chords: major and minor, augmented and diminished,
-  sevens (with forementioned only) and suspended (2nd and 4th).
+  sevens (with forementioned only), suspended (2nd and 4th) and power (perfect
+  fifth).
 
 - Meters 2/2 and 4/4 are replaced with traditional C symbols.
 

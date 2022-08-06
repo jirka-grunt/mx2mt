@@ -115,6 +115,10 @@
 									case 'suspended-fourth':
 										$gchord->sus = 4;
 										break;
+									case 'power':
+										assert('$x_note->kind["text"] == 5');
+										$gchord->power = TRUE;
+										break;
 									default:
 										$gchord->unsupported = $this->getUnsupported('HARMONY KIND', $gchord->base.' '.$kind);
 								}

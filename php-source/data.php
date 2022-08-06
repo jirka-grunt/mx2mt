@@ -182,5 +182,6 @@
 		public $plus = 0;
 		public $maj = FALSE;
 		public $sus = 0;
+		public $power = FALSE;
 	}
 
