@@ -12,6 +12,8 @@ New features
 
 - Basic tuplets (triplets and duplets) are supported in standard situations.
 
+- Breve (double whole) and longa (double breve) note lengths are supported.
+
 Bugs fixed
 ----------
 

@@ -14,7 +14,7 @@ Supported features:
 - meters: with single denominator (C symbols for 2/2 and 4/4)
 - keys: flats or sharps
 - ordinary notes and rests
-- lengths: from 1/32 to whole note
+- lengths: from 1/32 to whole note, breve and longa
 - heights: from C2 to H6 (5 octaves)
 - accidentals: sharp, double sharp, natural, flat, double flat
 - single dots from 1/16 notes and rests

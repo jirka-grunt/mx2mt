@@ -11,6 +11,8 @@
 				'quarter' => 8,
 				'half'    => 16,
 				'whole'   => 32,
+				'breve'   => 64,
+				'long'    => 128,
 			);
 
 		protected $measureNumber;
