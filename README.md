@@ -4,7 +4,7 @@
 
 This converter is primary used to transfer songs of [Falešné společenstvo](http://fs.ulmus.cz/) from [Mozart](http://www.mozart.co.uk/) music processor to [MusixTeX](https://www.ctan.org/pkg/musixtex) typesetting notation via small subset of [MusicXML](http://www.musicxml.com/) 3.0 format.
 
-Written in [PHP](http://php.net/), sorry. But you can try [online version](http://mx2mt.ulmus.cz/).
+Written in [PHP](http://php.net/), sorry. But you can try [online version](http://mx2mt.ulmus.cz/). PHP 8 is not suported.
 
 You also need small [header.tex](https://github.com/jirka-grunt/mx2mt/blob/master/header.tex) file for some auxiliary and compatibility stuff.
 
@@ -45,6 +45,7 @@ Known limitations:
 - automatic orientation of stems, beams, slurs and ties
 - guitar chords are in Czech (=German) notation: B -> H, Bb -> B
 - augmented, diminished and half diminished seventh is not supported in chords
+- wrong vertical alignment with tuplets in multiple staves
 
 As MusicXML is pretty complex format there definitely are plenty of unknown limitations.
 Moreover, conversion is tested only with XML exported from Mozart version 12.
