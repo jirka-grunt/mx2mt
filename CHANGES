@@ -19,6 +19,7 @@ Bugs fixed
 
 - Repeats at the very beginning and the very end of piece are handled correctly.
 
+- Fixed handling of unsupported features with multiple staves.
 
 Version 1.1
 ===========

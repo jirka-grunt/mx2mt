@@ -452,8 +452,8 @@
 						$result[$index] = $nil;
 					} else {
 						$duration = $part->getDuration();
-						while (!empty($duration) && ($duration instanceof Unsupported)) {
-							$this->notation->elements[] = $duration;
+						while (!empty($duration) && ($duration[0] instanceof Unsupported)) {
+							$this->notation->elements[] = $duration[0];
 							$duration = $part->getDuration();
 						}
 						if (empty($duration)) {
